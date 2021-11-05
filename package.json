@@ -1,0 +1,29 @@
+{
+  "name": "docker-compose",
+  "version": "1.0.0",
+  "description": "一些可以基于docker-compose进行部署的服务",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liujin0215/docker-compose.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/liujin0215/docker-compose/issues"
+  },
+  "homepage": "https://github.com/liujin0215/docker-compose#readme",
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "devDependencies": {
+    "commitizen": "^4.2.4",
+    "conventional-changelog-cli": "^2.1.1",
+    "cz-conventional-changelog": "^3.3.0"
+  }
+}
