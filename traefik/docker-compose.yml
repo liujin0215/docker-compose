@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  traefik:
+    image: traefik:v2.5
+    restart: always
+    volumes:
+      - ./etc:/etc/traefik
+      - ./log:/log
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - traefik
+    labels:
+      # digestauth中间件，用于认证
+      - "traefik.http.middlewares.digestauth.digestauth.usersfile=/etc/traefik/passwd/digestauth"
+      - 'traefik.enable=true'
+      # Host根据实际情况进行修改
+      - 'traefik.http.routers.api.rule=Host(`traefik.example.net`)'
+      - 'traefik.http.routers.api.entrypoints=https'
+      - 'traefik.http.routers.api.service=api@internal'
+      - 'traefik.http.routers.api.tls=true'
+      - 'traefik.http.routers.api.tls.certresolver=letsencrypt'
+      # 使用digestauth进行认证
+      - 'traefik.http.routers.api.middlewares=digestauth@docker'
+    ports:
+      - 80:80
+      - 443:443
+
+networks:
+  traefik:
+    external:
+      name: traefik
+
