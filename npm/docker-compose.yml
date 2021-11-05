@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  npm:
+    image: verdaccio/verdaccio
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.npm.rule=Host(`npm.example.net`)"
+      - "traefik.http.routers.npm.entrypoints=https"
+      - "traefik.http.routers.npm.tls=true"
+      - "traefik.http.routers.npm.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.npm.service=npm"
+      - "traefik.http.services.npm.loadbalancer.server.port=4873"
+      - "traefik.http.services.npm.loadbalancer.server.scheme=http"
+    restart: always
+    volumes:
+      - ./verdaccio:/verdaccio
+    networks:
+      - default
+      - traefik
+
+networks:
+  default:
+  traefik:
+    external:
+      name: traefik
