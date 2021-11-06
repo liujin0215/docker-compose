@@ -1,0 +1,35 @@
+version: '3.7'
+services:
+  traefik:
+    image: traefik:v2.5
+    restart: always
+    volumes:
+      - ./traefik:/etc/traefik
+      - ./verdaccio:/verdaccio
+      - ./log:/log
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 80:80
+      - 443:443
+
+  npm:
+    image: verdaccio/verdaccio
+    labels:
+      - "traefik.enable=true"
+      # Host根据实际情况进行修改
+      - "traefik.http.routers.npm.rule=Host(`npm.example.net`)"
+      - "traefik.http.routers.npm.entrypoints=https"
+      - "traefik.http.routers.npm.tls=true"
+      - "traefik.http.routers.npm.tls.certresolver=letsencrypt"
+
+      # http跳转https的中间件
+      - "traefik.http.middlewares.https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.https.redirectscheme.permanent=true"
+
+      # http跳转https
+      - 'traefik.http.routers.npm-http.rule=Host(`npm.example.net`)'
+      - 'traefik.http.routers.npm-http.middlewares=https@docker'
+      - 'traefik.http.routers.npm-http.entrypoints=http'
+    restart: always
+    volumes:
+      - ./verdaccio:/verdaccio

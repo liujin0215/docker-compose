@@ -1,0 +1,25 @@
+providers:
+  docker:
+    watch: true
+    exposedByDefault: false
+entryPoints:
+  http:
+    address: ":80"
+  https:
+    address: ":443"
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      # email 根据实际情况进行修改
+      email: XXX@xxx.xxx
+      storage: acme.json
+      httpChallenge:
+        entryPoint: http
+
+log:
+  # 调试阶段可改为DEBUG
+  level: ERROR
+
+accessLog:
+   filePath: /log/access.log

@@ -12,6 +12,11 @@ services:
     labels:
       # digestauth中间件，用于认证
       - "traefik.http.middlewares.digestauth.digestauth.usersfile=/etc/traefik/passwd/digestauth"
+
+      # http跳转https的中间件
+      - "traefik.http.middlewares.https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.https.redirectscheme.permanent=true"
+
       - 'traefik.enable=true'
       # Host根据实际情况进行修改
       - 'traefik.http.routers.api.rule=Host(`traefik.example.net`)'
@@ -29,4 +34,3 @@ networks:
   traefik:
     external:
       name: traefik
-

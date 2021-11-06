@@ -1,0 +1,10 @@
+version: '3.7'
+services:
+  npm:
+    image: verdaccio/verdaccio
+    
+    restart: always
+    volumes:
+      - ./verdaccio:/verdaccio
+    ports:
+      - 4873:4873
