@@ -1,22 +1,10 @@
-# traefik基于docker-compose的安装
+# docker-compose部署traefik
 
 ## 依赖
 1. [docker](https://wiki.liujin.site/zh/docker/install)
 2. [docker-compose](https://wiki.liujin.site/zh/docker-compose/install)
 
-## 安装
-1. 创建docker网络
-```shell
-docker network create -d bridge traefik
-```
-
-2. 创建认证用户
-```shell
-docker run --rm -it -v `pwd`/etc/passwd:/passwd --entrypoint /usr/local/apache2/bin/htdigest httpd:alpine -c /passwd/digestauth traefik test
-```
-此处最后的"test"是用户名，根据实际情况进行自定义即可
-
-3. 修改配置文件
+## 配置文件
 - docker-compose.yml
 ```yaml
 version: '3.7'
@@ -51,6 +39,7 @@ networks:
     external:
       name: traefik
 ```
+
 - etc/traefik.yml
 ```yaml
 api: {}
@@ -85,10 +74,41 @@ accessLog:
    filePath: /log/access.log
 ```
 
-4. 启动
+## 命令
+1. 启动服务
 ```shell
 docker-compose up -d
 ```
+2. 关闭服务
+```shell
+docker-compose down
+```
+3. 重启服务
+```shell
+docker-compose restart
+```
 
-## 测试
-从浏览器打开`https://traefik.example.net`，输入账号密码
+## 步骤
+1. 安装[docker](https://wiki.liujin.site/zh/docker/install)和[docker-compose](https://wiki.liujin.site/zh/docker-compose/install)
+2. 下载代码
+```shell
+git clone https://github.com/liujin0215/docker-compose.git
+```
+3. 进入对应文件夹
+```shell
+cd docker-compose/traefik
+```
+4. 创建docker网络
+```shell
+docker network create -d bridge traefik
+```
+
+5. 创建认证用户
+```shell
+docker run --rm -it -v `pwd`/etc/passwd:/passwd --entrypoint /usr/local/apache2/bin/htdigest httpd:alpine -c /passwd/digestauth traefik test
+```
+此处最后的"test"是用户名，根据实际情况进行自定义即可
+
+6. 根据实际情况修改配置文件: `docker-compose.yml`, `etc/traefik.yml`
+7. 浏览器打开`https://traefik.example.net`(打开实际配置的域名), 看到如下界面即成功部署完成
+![traefik.png](https://wiki.liujin.site/traefik.png)

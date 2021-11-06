@@ -1,4 +1,4 @@
-# 用docker-compose部署all in one的npm私有仓库的方案
+# all in one的npm私有仓库的部署方案
 
 docker-compose + verdaccio + traefik搭建的npm私有仓库。  
 
@@ -8,6 +8,10 @@ docker-compose + verdaccio + traefik搭建的npm私有仓库。
 
 ## 适用场景
 适用于未部署且不打算部署其他占用80，443端口的服务的服务器。
+
+## 其他方案
+- [简单的npm私有仓库部署方案](../local) 
+- [用traefik进行反向代理的npm私有仓库部署方案](../traefik) 
 
 ## 依赖
 1. [docker](https://wiki.liujin.site/zh/docker/install)

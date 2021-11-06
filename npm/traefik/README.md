@@ -9,6 +9,10 @@ docker-compose + verdaccio + traefik搭建的npm私有仓库。
 ## 适用场景
 已经或计划使用docker-compose安装traefik进行http服务管理的服务器
 
+## 其他方案
+- [all in one的npm私有仓库的部署方案](../allinone) 
+- [简单的npm私有仓库部署方案](../local) 
+
 ## 依赖
 1. [docker](https://wiki.liujin.site/zh/docker/install)
 2. [docker-compose](https://wiki.liujin.site/zh/docker-compose/install)

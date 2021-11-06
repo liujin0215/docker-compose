@@ -9,6 +9,10 @@ docker-compose + verdaccio搭建的npm私有仓库。
 ## 适用场景
 只想简单部署一个私有npm仓库，不需要https，或可通过其他服务(nginx等)进行反向代理。
 
+## 其他方案
+- [all in one的npm私有仓库的部署方案](../allinone) 
+- [用traefik进行反向代理的npm私有仓库部署方案](../traefik) 
+
 ## 依赖
 1. [docker](https://wiki.liujin.site/zh/docker/install)
 2. [docker-compose](https://wiki.liujin.site/zh/docker-compose/install)
