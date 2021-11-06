@@ -5,7 +5,6 @@ services:
     restart: always
     volumes:
       - ./traefik:/etc/traefik
-      - ./verdaccio:/verdaccio
       - ./log:/log
       - /var/run/docker.sock:/var/run/docker.sock
     ports:

@@ -6,6 +6,6 @@
 
 ## docker-compose部署常用的服务
 - [x] [通过docker-compose部署traefik，并快速实现https, 以及登录认证](./traefik)
-- [x] [通过docker-compose部署npm, 3种不同的方案，适用各种场景，既能all in one, 也能配合其他反向代理服务使用](./npm) 
-- [ ] gitlab  
-- [ ] minio  
+- [x] [通过docker-compose部署npm私有仓库, 3种不同的方案，适用各种场景，既能all in one, 也能配合其他反向代理服务使用](./npm) 
+- [x] [通过docker-compose部署gitlab服务，部署快速，配置简单](./gitlab)   
+- [x] [通过docker-compose部署S3服务](./minio)   

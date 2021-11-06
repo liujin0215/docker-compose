@@ -1,0 +1,42 @@
+version: '3.7'
+services:
+  traefik:
+    image: traefik:v2.5
+    restart: always
+    volumes:
+      - ./traefik:/etc/traefik
+      - ./log:/log
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 80:80
+      - 443:443
+
+  gitlab:
+    image: gitlab/gitlab-ce:13.4.1-ce.0
+    restart: always
+    environment:
+      # 时区，根据实际情况配置
+      TZ: 'Asia/Shanghai'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gitlab.rule=Host(`gitlab.example.net`)"
+      - "traefik.http.routers.gitlab.entrypoints=https"
+      - "traefik.http.routers.gitlab.tls=true"
+      - "traefik.http.routers.gitlab.service=gitlab"
+      - "traefik.http.services.gitlab.loadbalancer.server.port=80"
+      - "traefik.http.services.gitlab.loadbalancer.server.scheme=http"
+
+      # http跳转https的中间件
+      - "traefik.http.middlewares.https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.https.redirectscheme.permanent=true"
+
+      # http跳转https
+      - 'traefik.http.routers.gitlab-http.rule=Host(`gitlab.example.net`)'
+      - 'traefik.http.routers.gitlab-http.middlewares=https@docker'
+      - 'traefik.http.routers.gitlab-http.entrypoints=http'
+    ports:
+      - '1022:22'
+    volumes:
+      - './gitlab:/etc/gitlab'
+      - './log:/var/log/gitlab'
+      - './data:/var/opt/gitlab'

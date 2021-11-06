@@ -1,0 +1,58 @@
+version: '3.7'
+services:
+  traefik:
+    image: traefik:v2.5
+    restart: always
+    volumes:
+      - ./traefik:/etc/traefik
+      - ./log:/log
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 80:80
+      - 443:443
+
+  minio:
+    image: minio/minio:latest
+    restart: always
+    labels:
+      - "traefik.enable=true"
+
+      # Host根据实际情况进行修改
+      - "traefik.http.routers.minio.rule=Host(`minio.example.net`)"
+      - "traefik.http.routers.minio.entrypoints=https"
+      - "traefik.http.routers.minio.tls=true"
+      - "traefik.http.routers.minio.service=minio"
+      - "traefik.http.services.minio.loadbalancer.server.port=9000"
+      - "traefik.http.services.minio.loadbalancer.server.scheme=http"
+
+      # Host根据实际情况进行修改
+      - "traefik.http.routers.minioadmin.rule=Host(`minioadmin.example.net`)"
+      - "traefik.http.routers.minioadmin.entrypoints=https"
+      - "traefik.http.routers.minioadmin.tls=true"
+      - "traefik.http.routers.minioadmin.service=minioadmin"
+      - "traefik.http.services.minioadmin.loadbalancer.server.port=9001"
+      - "traefik.http.services.minioadmin.loadbalancer.server.scheme=http"
+
+      # http跳转https的中间件
+      - "traefik.http.middlewares.https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.https.redirectscheme.permanent=true"
+
+      # http跳转https
+      - 'traefik.http.routers.minio-http.rule=Host(`minio.example.net`)'
+      - 'traefik.http.routers.minio-http.middlewares=https@docker'
+      - 'traefik.http.routers.minio-http.entrypoints=http'
+      - "traefik.http.routers.minio-http.service=minio-http"
+      - "traefik.http.services.minio-http.loadbalancer.server.port=9000"
+      - "traefik.http.services.minio-http.loadbalancer.server.scheme=http"
+
+      - 'traefik.http.routers.minioadmin-http.rule=Host(`minioadmin.example.net`)'
+      - 'traefik.http.routers.minioadmin-http.middlewares=https@docker'
+      - 'traefik.http.routers.minioadmin-http.entrypoints=http'
+      - "traefik.http.routers.minioadmin-http.service=minioadmin-http"
+      - "traefik.http.services.minioadmin-http.loadbalancer.server.port=9001"
+      - "traefik.http.services.minioadmin-http.loadbalancer.server.scheme=http"
+    command: server /data --console-address ":9001"
+    env_file:
+      - ./.env
+    volumes:
+      - ./data:/data
